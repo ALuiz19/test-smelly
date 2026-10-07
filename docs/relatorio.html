@@ -92,7 +92,7 @@
     expect(resultado).toBe(false);
   }
 }</code></pre>
-<p><strong>Por que é um mau cheiro:</strong> com laço e desvio, o caminho executado depende dos dados, e o teste mistura dois comportamentos (usuário comum e administrador). <strong>Risco:</strong> se a lista vier vazia ou o <code>isAdmin</code> vier com valor inesperado, parte dos <code>expect</code> nunca roda e o teste passa sem verificar nada. Quando falha, não fica claro qual iteração quebrou.</p>
+<p><strong>Por que é um mau cheiro:</strong> com laço e desvio, o caminho executado depende dos dados, e o teste mistura dois comportamentos (usuário comum e administrador). <strong>Risco:</strong> parte dos <code>expect</code> pode nunca rodar. Exemplo concreto: se <code>createUser</code> passar a ignorar o parâmetro <code>isAdmin</code>, o admin cai no ramo do usuário comum, o <code>else</code> nunca executa e o teste continua verde. Quando falha, não fica claro qual iteração quebrou.</p>
 
 <h3>1.2 Exception Handling</h3>
 <pre><code>try {
@@ -198,10 +198,10 @@ expect(relatorio.startsWith('--- Relatório de Usuários ---')).toBe(true);</cod
   <li><strong>Estado pela API pública:</strong> o status é lido com <code>getUserById</code>, e não pela referência devolvida por <code>createUser</code>.</li>
   <li><strong>Relatório pelo conteúdo:</strong> <code>toContain</code> com título, id, nome e status, em vez da linha formatada exata.</li>
   <li><strong>Dados no próprio Arrange</strong>, o que acaba com a General Fixture. O <code>test.skip</code> virou um teste real da base vazia ("Nenhum usuário cadastrado").</li>
-  <li><strong>Casos-limite:</strong> exatamente 18 anos, id inexistente e ids distintos. Eles matariam mutantes que a suíte original deixaria vivos (como trocar <code>&lt;</code> por <code>&lt;=</code>).</li>
+  <li><strong>Casos-limite:</strong> exatamente 18 anos, id inexistente e busca com mais de um usuário na base. Eles matam mutantes que a suíte original deixaria vivos (como trocar <code>&lt;</code> por <code>&lt;=</code>).</li>
 </ul>
 
-<p>A suíte limpa ficou com 21 testes. Para conferir o ganho, fiz um teste de mutação manual: troquei <code>if (idade &lt; 18)</code> por <code>if (false)</code> em <code>src/userService.js</code>. A suíte original continuou toda verde, e a limpa falhou no teste "lança erro quando o usuário é menor de idade". Depois desfiz a alteração.</p>
+<p>A suíte limpa ficou com 22 testes. Para conferir o ganho, fiz um teste de mutação manual: troquei <code>if (idade &lt; 18)</code> por <code>if (false)</code> em <code>src/userService.js</code>. A suíte original continuou toda verde, e a limpa falhou no teste "lança erro quando o usuário é menor de idade". Depois desfiz a alteração.</p>
 
 <h2>3. Relatório da Ferramenta</h2>
 

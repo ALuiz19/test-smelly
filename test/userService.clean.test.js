@@ -60,6 +60,19 @@ describe('UserService', () => {
       expect(usuario.isAdmin).toBe(false);
     });
 
+    test('registra a data de criação do usuário', () => {
+      // Arrange
+      const nome = 'Fulano de Tal';
+      const email = 'fulano@teste.com';
+      const idade = 25;
+
+      // Act
+      const usuario = userService.createUser(nome, email, idade);
+
+      // Assert
+      expect(usuario.createdAt).toEqual(expect.any(Date));
+    });
+
     test('gera ids diferentes para usuários distintos', () => {
       // Arrange
       const primeiro = userService.createUser('Alice', 'alice@teste.com', 28);
@@ -109,19 +122,21 @@ describe('UserService', () => {
   });
 
   describe('getUserById', () => {
-    test('retorna o usuário criado ao buscar pelo seu id', () => {
+    test('retorna o usuário correspondente ao id buscado', () => {
       // Arrange
-      const criado = userService.createUser('Fulano de Tal', 'fulano@teste.com', 25);
+      userService.createUser('Alice', 'alice@teste.com', 28);
+      const bob = userService.createUser('Bob', 'bob@teste.com', 32);
 
       // Act
-      const encontrado = userService.getUserById(criado.id);
+      const encontrado = userService.getUserById(bob.id);
 
       // Assert
-      expect(encontrado).toEqual(criado);
+      expect(encontrado).toEqual(bob);
     });
 
     test('retorna null quando o id não existe', () => {
       // Arrange
+      userService.createUser('Alice', 'alice@teste.com', 28);
       const idInexistente = 'id-inexistente';
 
       // Act
@@ -179,6 +194,7 @@ describe('UserService', () => {
 
     test('retorna false quando o id não existe', () => {
       // Arrange
+      userService.createUser('Comum', 'comum@teste.com', 30);
       const idInexistente = 'id-inexistente';
 
       // Act
@@ -214,6 +230,7 @@ describe('UserService', () => {
       expect(relatorio).toContain('Alice');
       expect(relatorio).toContain(bob.id);
       expect(relatorio).toContain('Bob');
+      expect(relatorio).not.toContain('Nenhum usuário cadastrado');
     });
 
     test('exibe o status atual do usuário', () => {

@@ -42,7 +42,7 @@ for (const user of todosOsUsuarios) {
 ```
 
 - **Por que é mau cheiro:** o caminho que o teste percorre depende dos dados. O teste vira um pequeno programa, com laço e desvio, que também precisaria ser testado.
-- **Risco:** se a lista estiver vazia ou se `isAdmin` vier com um valor inesperado, parte dos `expect` nunca roda e o teste passa sem verificar nada. Também fica difícil saber qual iteração falhou. São dois comportamentos (usuário comum e administrador) num só teste.
+- **Risco:** parte dos `expect` pode nunca rodar. Por exemplo, se `createUser` passar a ignorar o parâmetro `isAdmin`, o admin cai no ramo do usuário comum, o `else` nunca executa e o teste continua verde. Também fica difícil saber qual iteração falhou. São dois comportamentos (usuário comum e administrador) num só teste.
 
 ## 3. `deve gerar um relatório de usuários formatado` (linhas 54–64)
 
@@ -55,7 +55,7 @@ expect(relatorio.startsWith('--- Relatório de Usuários ---')).toBe(true);
 ```
 
 - **Por que é mau cheiro:** o teste compara a linha formatada exata e o cabeçalho literal, inclusive os traços, os espaços e a quebra de linha. Ele está preso à apresentação, não ao conteúdo. O próprio `src/userService.js` avisa que "o formato do relatório pode mudar no futuro".
-- **Risco:** qualquer ajuste de formatação quebra o teste mesmo com o comportamento correto (falso negativo). Com o tempo, a equipe passa a ignorar falhas desse tipo. Além disso, o `toBe(true)` sobre o `startsWith` dá uma mensagem de erro pobre ("expected true, received false").
+- **Risco:** qualquer ajuste de formatação quebra o teste mesmo com o comportamento correto (alarme falso). Com o tempo, a equipe passa a ignorar falhas desse tipo. Além disso, o `toBe(true)` sobre o `startsWith` dá uma mensagem de erro pobre ("expected true, received false").
 
 ## 4. `deve falhar ao criar usuário menor de idade` (linhas 66–75)
 
