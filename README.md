@@ -28,3 +28,9 @@ Siga os passos abaixo para preparar seu ambiente de trabalho.
 git clone [URL_DO_SEU_FORK_DO_REPOSITORIO]
 cd test-smelly
 ```
+
+---
+
+## Trabalho 2: Bad Smells e Refatoração Segura
+
+O segundo trabalho (ESLint + SonarJS, refatoração do `ReportGenerator`) está na pasta [`bad-smells-refactoring/`](bad-smells-refactoring/README.md), com seu próprio `package.json` e `.eslintrc.json`.

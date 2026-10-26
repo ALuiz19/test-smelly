@@ -1,0 +1,46 @@
+$ npm test -- --verbose
+FAIL __tests__/ReportGenerator.test.js
+  ReportGenerator (Rede de Segurança)
+    ✓ deve lidar com array de itens vazio corretamente
+    Admin User
+      ✓ deve gerar um relatório CSV completo para Admin (12 ms)
+      ✕ deve gerar um relatório HTML completo para Admin (com prioridade) (1 ms)
+    Standard User
+      ✓ deve gerar um relatório CSV filtrado para User (apenas itens <= 500) (1 ms)
+      ✓ deve gerar um relatório HTML filtrado para User (apenas itens <= 500)
+  ● ReportGenerator (Rede de Segurança) › Admin User › deve gerar um relatório HTML completo para Admin (com prioridade)
+    expect(received).toContain(expected) // indexOf
+    Expected substring: "<tr><td>1</td><td>Produto A</td><td>300</td></tr>"
+    Received string:    "<html><body>
+    <h1>Relatório</h1>
+    <h2>Usuário: Admin</h2>
+    <table>
+    <tr><th>ID</th><th>Nome</th><th>Valor</th></tr>
+    <tr ><td>1</td><td>Produto A</td><td>300</td></tr>
+    <tr ><td>2</td><td>Produto B</td><td>700</td></tr>
+    <tr style=\"font-weight:bold;\"><td>3</td><td>Produto C</td><td>1200</td></tr>
+    </table>
+    <h3>Total: 2200</h3>
+    </body></html>"
+      48 |       expect(report).toContain('<h2>Usuário: Admin</h2>');
+      49 |       // Item Padrão
+    > 50 |       expect(report).toContain('<tr><td>1</td><td>Produto A</td><td>300</td></tr>');
+         |                      ^
+      51 |       // Item Prioritário (acima de 1000)
+      52 |       expect(report).toContain(
+      53 |         '<tr style="font-weight:bold;"><td>3</td><td>Produto C</td><td>1200</td></tr>',
+      at Object.<anonymous> (__tests__/ReportGenerator.test.js:50:22)
+PASS __tests__/ReportGenerator.refactored.test.js
+  ReportGenerator (Rede de Segurança)
+    ✓ deve lidar com array de itens vazio corretamente (1 ms)
+    Admin User
+      ✓ deve gerar um relatório CSV completo para Admin (18 ms)
+      ✓ deve gerar um relatório HTML completo para Admin (com prioridade) (1 ms)
+    Standard User
+      ✓ deve gerar um relatório CSV filtrado para User (apenas itens <= 500)
+      ✓ deve gerar um relatório HTML filtrado para User (apenas itens <= 500)
+Test Suites: 1 failed, 1 passed, 2 total
+Tests:       1 failed, 9 passed, 10 total
+Snapshots:   0 total
+Time:        0.473 s
+Ran all test suites.
