@@ -12,6 +12,9 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "ignorePatterns": [
+    "bad-smells-refactoring/"
+  ],
   "plugins": [
     "jest"
   ],

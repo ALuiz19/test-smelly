@@ -109,14 +109,18 @@ export class ReportGenerator {
    * - Users comuns só veem itens com valor <= 500.
    */
   generateReport(reportType, user, items) {
-    const policy = ROLE_POLICIES[user.role] ?? new NoAccessPolicy();
+    // Object.hasOwn evita que perfis/formatos como 'constructor' ou 'toString'
+    // encontrem métodos herdados de Object.prototype.
+    const policy = Object.hasOwn(ROLE_POLICIES, user.role)
+      ? ROLE_POLICIES[user.role]
+      : new NoAccessPolicy();
     const visibleItems = items.filter((item) => policy.canView(item));
     visibleItems.forEach((item) => policy.prepare(item));
 
-    const formatter = FORMATTERS[reportType];
-    if (!formatter) {
+    if (!Object.hasOwn(FORMATTERS, reportType)) {
       return '';
     }
+    const formatter = FORMATTERS[reportType];
 
     const rows = visibleItems.map((item) =>
       formatter.row(item, user, policy.isHighlighted(item)),
